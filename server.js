@@ -90,6 +90,7 @@ function sampleScatterPlotByYears(min_year, max_year){
   })
 }
 
+
 function barGraphByDecades(){
   client.search({
     index: 'million_songs',
@@ -98,7 +99,7 @@ function barGraphByDecades(){
       query: {
         range: {
           year: {
-            gte: 1920
+            gte: 0
           }
         }
       },
@@ -107,7 +108,8 @@ function barGraphByDecades(){
         by_year: {
           histogram: {
             field: "year",
-            interval: 10    // 10 years
+            interval: 10,     // 10 years
+            min_doc_count: 1  // don't return results unless there's at least 1 thing there
           }, 
           aggs: {
             avg_hotttnesss: {
