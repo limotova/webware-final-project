@@ -4,6 +4,7 @@ var http = require('http')
   , elasticsearch = require('elasticsearch')
   , port = 8080
 
+
 var client = new elasticsearch.Client({
   host: 'localhost:9200',
   log: 'trace' // CHANGE THIS TO trace WHEN TESTING/DEBUGGING, info OTHERWISE
@@ -51,7 +52,7 @@ function clientDelete(){
 
 // THIS IS HOW YOU DO A SLIGHTLY MORE COMPLICATED SEARCH QUERY
 // find songs that have "blues in their title field"
-// function clientSearch(){
+function clientSearch(){
   client.search({
     index: 'million_songs',
     type: 'song',
@@ -67,40 +68,56 @@ function clientDelete(){
   }, function (err){
     console.trace(err.message);
   }); 
-// }
+ }
 
 
 
-// var server = http.createServer(function (req, res){
-//   var uri = url.parse(req.url)
-//
-//   switch(uri.pathname){
-//   case '/':
-//     sendFile(res, 'index.html')
-//     break
-//   case '/index.html':
-//     sendFile(res, 'index.html')
-//     break
-//   case '/README.md':
-//     sendFile(res, 'README.md', 'text/md')
-//     break
-//   case '/Readme.md':
-//     sendFile(res, 'README.md', 'text/md')
-//     break
-//   case '/readme.md':
-//     sendFile(res, 'README.md', 'text/md')
-//     break
-//   }
-//
-// })
-//
-// server.listen(process.env.PORT || port)
-//
-// function sendFile(res, filename, contentType){
-//   contentType = contentType || 'text/html'
-//
-//   fs.readFile(filename, function(error, content){
-//     res.writeHead(200, {'Content-type': contentType})
-//     res.end(content, 'utf-8')
-//   })
-// }
+var server = http.createServer(function (req, res){
+  var uri = url.parse(req.url)
+
+  switch(uri.pathname){
+  case '/':
+    sendFile(res, 'index.html')
+    break
+  case '/index.html':
+    sendFile(res, 'index.html')
+    break
+  case '/README.md':
+    sendFile(res, 'README.md', 'text/md')
+    break
+  case '/Readme.md':
+    sendFile(res, 'README.md', 'text/md')
+    break
+  case '/readme.md':
+    sendFile(res, 'README.md', 'text/md')
+    break
+  }
+
+})
+
+server.listen(process.env.PORT || port);
+console.log('listening at port: ' + port);
+
+function sendFile(res, filename, contentType){
+  contentType = contentType || 'text/html'
+
+  fs.readFile(filename, function(error, content){
+    res.writeHead(200, {'Content-type': contentType})
+    res.end(content, 'utf-8')
+  })
+}
+
+
+//socket.io
+  var io = require('socket.io')(server)
+
+io.on('connection', function (socket) {
+  console.log('BRRRRRUH')
+  socket.emit('I am born', { hello: 'world' });
+  socket.on('year event',yearQuery );
+});
+
+function yearQuery(data) {
+  console.log('I got a year')
+  console.log(data);
+}
