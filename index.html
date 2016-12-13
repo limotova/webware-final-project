@@ -1,1 +1,46 @@
 <!--just an empty index file 3: -->
+<html>
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+
+
+
+
+<body>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    var socket = io();//init socket.io on client
+
+
+    socket.on('I am born', sendQuery);//listen to 'I am born' event, first event upon connection
+
+    socket.on('year query response', createGraph);// listen to an event for a query response after requesting it
+
+
+    //sample function to send a query
+    function sendQuery(data) {
+        console.log('client received initial message');
+        console.log(data);//data contains the message contents
+        socket.emit('year query request', { year: '1950' });
+    }
+    //sample function to do stuff with the data after receiving them from the query response
+    function createGraph(data){
+        console.log('received query response');
+        console.log('Creating a graph with: ' + JSON.stringify(data));//data contains the message contents
+    }
+    
+</script>
+
+
+
+<p>STUFF</p>
+
+
+</body>
+
+
+
+</html>
