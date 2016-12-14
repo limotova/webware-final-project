@@ -28,15 +28,153 @@ rect.background {
 
 <html>
 <head>
-    <script src="/socket.io/socket.io.js"></script>
+
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<!-- style for pie chart
+    <style>
+
+        #pieChart {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            width: 960px;
+            height: 500px;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        path.slice{
+            stroke-width:2px;
+        }
+
+        polyline{
+            opacity: .3;
+            stroke: black;
+            stroke-width: 2px;
+            fill: none;
+        }
+
+        .labelValue
+        {
+            font-size: 100%;
+            opacity: .5;
+            color: white;
+
+        }
+
+        .toolTip {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            position: absolute;
+            display: none;
+            width: auto;
+            height: auto;
+            background: none repeat scroll 0 0 white;
+            border: 0 none;
+            border-radius: 8px 8px 8px 8px;
+            box-shadow: -3px 3px 15px #888888;
+            color: white;
+            font: 12px sans-serif;
+            padding: 5px;
+            text-align: center;
+        }
+        .text {
+            font: 12px sans-serif;
+            color: white;
+        }
+    </style>
+-->
+
+<!--Style for bar chart
+
+    <style type="text/css">
+
+        text {
+            font: 10px sans-serif;
+        }
+
+        rect.background {
+            fill: white;
+        }
+
+        .axis {
+            shape-rendering: crispEdges;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+        }
+
+
+    </style>
+-->
+
+<!-- style for bootstrp divs and navbar
+    <style>
+        body {
+            position: relative;
+        }
+        #word {padding-top:50px;height:750px;color: #fff; background-color: #35478C;}
+        #fade {padding-top:50px;height:750px;color: #fff; background-color: #4E7AC7;}
+        #loud {padding-top:50px;height:750px;color: #fff; background-color: #7FB2F0;}
+        #topNav {background-color: #16193B;}
+    </style>
+-->
+<!-- style for scatter plot-->
+
+<style>
+    body {
+        font-family:"Helvetica Neue";
+        color: #686765;
+    }
+    .name {
+        float:right;
+        color:#27aae1;
+    }
+    .axis {
+        fill: none;
+        stroke: #AAA;
+        stroke-width: 1px;
+    }
+    text {
+        stroke: none;
+        fill: #666666;
+        font-size: .6em;
+        font-family:"Helvetica Neue"
+    }
+    .label {
+        fill: #414241;
+    }
+    .node {
+        cursor:pointer;
+    }
+    .dot {
+        opacity: .7;
+        cursor: pointer;
+    }
+</style>
+
+
+
 </head>
 
 
 
-
-
+<!-->
 <body>
+<!--
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+-->
+
 <script src="/socket.io/socket.io.js"></script>
+
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script>
 // BAR GRAPH SCRIPTS
@@ -262,33 +400,493 @@ function stack(i) {
   
 </script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+<!--
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+-->
+
+<!--
+
+<nav class="navbar navbar-inverse navbar-fixed-top" id="topNav">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">SongStats</a>
+        </div>
+        <div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="#word">Words</a></li>
+                    <li><a href="#fade">Fades</a></li>
+                    <li><a href="#loud">Loudness</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div id="word" class="container-fluid">
+    <h1>Most Used Words in Songs</h1>
+    <div id ="pieChart">
+        <input name="dataset" id="dataset" type="range" min="1920" max="2000" value="1920" step="10" onchange="showValue(this.value)" />
+        <span id="range">1920</span>
+    </div>
+
+</div>
+<div id="fade" class="container-fluid">
+    <h1>Fade in and out times in songs</h1>
+</div>
+
+<div id="loud" class="container-fluid">
+    <h1>Loudness of songs</h1>
+    <div class="someclass">
+        <h2>Create A Bar Chart With D3 JavaScript</h2>
+        <div id="bar-chart">
+
+        </div>
+    </div>
+</div>
+-->
+
+<!-- slider for pie chart-->
+<script>
+    function showValue(newValue)
+    {
+        document.getElementById("range").innerHTML=newValue;
+    }
+</script>
+
+<!-- code for pie chart-->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<!--
+<script>
+    d3.select("input[value=\"total\"]").property("checked", true);
+
+    var svg = d3.select("#pieChart")
+            .append("svg")
+            .append("g")
+
+    svg.append("g")
+            .attr("class", "slices");
+    svg.append("g")
+            .attr("class", "labelName");
+    svg.append("g")
+            .attr("class", "labelValue");
+    svg.append("g")
+            .attr("class", "lines");
+
+    var width = 960,
+            height = 450,
+            radius = Math.min(width, height) / 2;
+
+    var pie = d3.layout.pie()
+            .sort(null)
+            .value(function(d) {
+                return d.value;
+            });
+
+    var arc = d3.svg.arc()
+            .outerRadius(radius * 0.8)
+            .innerRadius(radius * 0.3);
+
+    var outerArc = d3.svg.arc()
+            .innerRadius(radius * 0.7)
+            .outerRadius(radius * 0.9);
+
+    var legendRectSize = (radius * 0.05);
+    var legendSpacing = radius * 0.02;
+
+
+    var div = d3.select("#pieChart").append("div").attr("class", "toolTip");
+
+    svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var colorRange = d3.scale.category20();
+    var color = d3.scale.ordinal()
+            .range(colorRange.range());
+
+
+//    datasetTotal = [
+//        {label:"Category 1", value:19},
+//        {label:"Category 2", value:5},
+//        {label:"Category 3", value:13},
+//        {label:"Category 4", value:17},
+//        {label:"Category 5", value:19},
+//        {label:"Category 6", value:27}
+//    ];
+//
+//    datasetOption1 = [
+//        {label:"Category 1", value:22},
+//        {label:"Category 2", value:33},
+//        {label:"Category 3", value:4},
+//        {label:"Category 4", value:15},
+//        {label:"Category 5", value:36},
+//        {label:"Category 6", value:0}
+//    ];
+//
+//    datasetOption2 = [
+//        {label:"Category 1", value:10},
+//        {label:"Category 2", value:20},
+//        {label:"Category 3", value:30},
+//        {label:"Category 4", value:5},
+//        {label:"Category 5", value:12},
+//        {label:"Category 6", value:23}
+//    ];
+
+   // change(datasetTotal);
+    function initPie(){
+        sendPieYearQuery(1920);
+    }
+    //initPie()
+    d3.selectAll("input")
+            .on("change", selectDataset);
+
+    function selectDataset()
+    {
+        var value = this.value;
+        sendPieYearQuery(value);
+    }
+
+    function change(data) {
+
+        /* ------- PIE SLICES -------*/
+        var slice = svg.select(".slices").selectAll("path.slice")
+                .data(pie(data), function(d){ return d.data.label });
+
+        slice.enter()
+                .insert("path")
+                .style("fill", function(d) { return color(d.data.label); })
+                .attr("class", "slice");
+
+        slice
+                .transition().duration(1000)
+                .attrTween("d", function(d) {
+                    this._current = this._current || d;
+                    var interpolate = d3.interpolate(this._current, d);
+                    this._current = interpolate(0);
+                    return function(t) {
+                        return arc(interpolate(t));
+                    };
+                })
+        slice
+                .on("mousemove", function(d){
+                    div.style("left", d3.event.pageX+10+"px");
+                    div.style("top", d3.event.pageY-25+"px");
+                    div.style("display", "inline-block");
+                    div.html((d.data.label)+"<br>"+(d.data.value));
+                });
+        slice
+                .on("mouseout", function(d){
+                    div.style("display", "none");
+                });
+
+        slice.exit()
+                .remove();
+//LEGEND CODE
+//        var legend = svg.selectAll('.legend')
+//                .data(color.domain())
+//                .enter()
+//                .append('g')
+//                .attr('class', 'legend')
+//                .attr('transform', function(d, i) {
+//                    var height = legendRectSize + legendSpacing;
+//                    var offset =  height * color.domain().length / 2;
+//                    var horz = -3 * legendRectSize;
+//                    var vert = i * height - offset;
+//                    return 'translate(' + horz + ',' + vert + ')';
+//                });
+//
+//        legend.append('rect')
+//                .attr('width', legendRectSize)
+//                .attr('height', legendRectSize)
+//                .style('fill', color)
+//                .style('stroke', color);
+//
+//        legend.append('text')
+//                .attr('x', legendRectSize + legendSpacing)
+//                .attr('y', legendRectSize - legendSpacing)
+//                .text(function(d) { return d; });
+
+        /* ------- TEXT LABELS -------*/
+
+        var text = svg.select(".labelName").selectAll("text")
+                .data(pie(data), function(d){ return d.data.label });
+
+        text.enter()
+                .append("text")
+                .attr("dy", ".35em")
+                .text(function(d) {
+                    return (d.data.label+": "+d.value);
+                });
+
+        function midAngle(d){
+            return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+
+        text
+                .transition().duration(1000)
+                .attrTween("transform", function(d) {
+                    this._current = this._current || d;
+                    var interpolate = d3.interpolate(this._current, d);
+                    this._current = interpolate(0);
+                    return function(t) {
+                        var d2 = interpolate(t);
+                        var pos = outerArc.centroid(d2);
+                        pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+                        return "translate("+ pos +")";
+                    };
+                })
+                .styleTween("text-anchor", function(d){
+                    this._current = this._current || d;
+                    var interpolate = d3.interpolate(this._current, d);
+                    this._current = interpolate(0);
+                    return function(t) {
+                        var d2 = interpolate(t);
+                        return midAngle(d2) < Math.PI ? "start":"end";
+                    };
+                })
+                .text(function(d) {
+                    return (d.data.label+": "+d.value);
+                });
+
+
+        text.exit()
+                .remove();
+
+        /* ------- SLICE TO TEXT POLYLINES -------*/
+
+        var polyline = svg.select(".lines").selectAll("polyline")
+                .data(pie(data), function(d){ return d.data.label });
+
+        polyline.enter()
+                .append("polyline");
+
+        polyline.transition().duration(1000)
+                .attrTween("points", function(d){
+                    this._current = this._current || d;
+                    var interpolate = d3.interpolate(this._current, d);
+                    this._current = interpolate(0);
+                    return function(t) {
+                        var d2 = interpolate(t);
+                        var pos = outerArc.centroid(d2);
+                        pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+                        return [arc.centroid(d2), outerArc.centroid(d2), pos];
+                    };
+                });
+
+        polyline.exit()
+                .remove();
+    };
+
+</script>
+-->
+
+
+
+<!-- scatter plot code-->
+<div id="scatter-load"></div>
+
+
+<script>
+    var chocolates = [{
+        "name": "Dairy Milk",
+        "manufacturer": "cadbury",
+        "price": 45,
+        "rating": 2
+    }, {
+        "name": "Galaxy",
+        "manufacturer": "Nestle",
+        "price": 42,
+        "rating": 3
+    }, {
+        "name": "Lindt",
+        "manufacturer": "Lindt",
+        "price": 80,
+        "rating": 4
+    }, {
+        "name": "Hershey",
+        "manufacturer": "Hershey",
+        "price": 40,
+        "rating": 1
+    }, {
+        "name": "Dolfin",
+        "manufacturer": "Lindt",
+        "price": 90,
+        "rating": 5
+    }, {
+        "name": "Bournville",
+        "manufacturer": "cadbury",
+        "price": 70,
+        "rating": 2
+    }];
+
+    // call the method below
+    showScatterPlot(chocolates);
+
+    function showScatterPlot(data) {
+        // just to have some space around items.
+        var margins = {
+            "left": 40,
+            "right": 30,
+            "top": 30,
+            "bottom": 30
+        };
+
+        var width = 500;
+        var height = 500;
+
+        // this will be our colour scale. An Ordinal scale.
+        var colors = d3.scale.category10();
+
+        // we add the SVG component to the scatter-load div
+        var svg = d3.select("#scatter-load").append("svg").attr("width", width).attr("height", height).append("g")
+                .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
+
+        // this sets the scale that we're using for the X axis.
+        // the domain define the min and max variables to show. In this case, it's the min and max prices of items.
+        // this is made a compact piece of code due to d3.extent which gives back the max and min of the price variable within the dataset
+        var x = d3.scale.linear()
+                .domain(d3.extent(data, function (d) {
+                    return d.price;
+                }))
+                // the range maps the domain to values from 0 to the width minus the left and right margins (used to space out the visualization)
+                .range([0, width - margins.left - margins.right]);
+
+        // this does the same as for the y axis but maps from the rating variable to the height to 0.
+        var y = d3.scale.linear()
+                .domain(d3.extent(data, function (d) {
+                    return d.rating;
+                }))
+                // Note that height goes first due to the weird SVG coordinate system
+                .range([height - margins.top - margins.bottom, 0]);
+
+        // we add the axes SVG component. At this point, this is just a placeholder. The actual axis will be added in a bit
+        svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + y.range()[0] + ")");
+        svg.append("g").attr("class", "y axis");
+
+        // this is our X axis label. Nothing too special to see here.
+        svg.append("text")
+                .attr("fill", "#414241")
+                .attr("text-anchor", "end")
+                .attr("x", width / 2)
+                .attr("y", height - 35)
+                .text("Price in pence (£)");
+
+
+        // this is the actual definition of our x and y axes. The orientation refers to where the labels appear - for the x axis, below or above the line, and for the y axis, left or right of the line. Tick padding refers to how much space between the tick and the label. There are other parameters too - see https://github.com/mbostock/d3/wiki/SVG-Axes for more information
+        var xAxis = d3.svg.axis().scale(x).orient("bottom").tickPadding(2);
+        var yAxis = d3.svg.axis().scale(y).orient("left").tickPadding(2);
+
+        // this is where we select the axis we created a few lines earlier. See how we select the axis item. in our svg we appended a g element with a x/y and axis class. To pull that back up, we do this svg select, then 'call' the appropriate axis object for rendering.
+        svg.selectAll("g.y.axis").call(yAxis);
+        svg.selectAll("g.x.axis").call(xAxis);
+
+        // now, we can get down to the data part, and drawing stuff. We are telling D3 that all nodes (g elements with class node) will have data attached to them. The 'key' we use (to let D3 know the uniqueness of items) will be the name. Not usually a great key, but fine for this example.
+        var chocolate = svg.selectAll("g.node").data(data, function (d) {
+            return d.name;
+        });
+
+        // we 'enter' the data, making the SVG group (to contain a circle and text) with a class node. This corresponds with what we told the data it should be above.
+
+        var chocolateGroup = chocolate.enter().append("g").attr("class", "node")
+        // this is how we set the position of the items. Translate is an incredibly useful function for rotating and positioning items
+                .attr('transform', function (d) {
+                    return "translate(" + x(d.price) + "," + y(d.rating) + ")";
+                });
+
+        // we add our first graphics element! A circle!
+        chocolateGroup.append("circle")
+                .attr("r", 5)
+                .attr("class", "dot")
+                .style("fill", function (d) {
+                    // remember the ordinal scales? We use the colors scale to get a colour for our manufacturer. Now each node will be coloured
+                    // by who makes the chocolate.
+                    return colors(d.manufacturer);
+                });
+
+        // now we add some text, so we can see what each item is.
+        chocolateGroup.append("text")
+                .style("text-anchor", "middle")
+                .attr("dy", -10)
+                .text(function (d) {
+                    // this shouldn't be a surprising statement.
+                    return d.name;
+                });
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
     var socket = io();//init socket.io on client
 
 
-    socket.on('I am born', sendQuery);//listen to 'I am born' event, first event upon connection
+    socket.on('I am born', function(){
+        console.log('INIT client pie chart');
+        socket.emit('pie year query request', 1920);
+        socket.emit('bar year query request');
+    });//listen to 'I am born' event, first event upon connection
 
-    socket.on('year query response', createGraph);// listen to an event for a query response after requesting it
+    socket.on('pie year query response', createPieChart);// listen to an event for a query response after requesting it
+    socket.on('bar year query response', createBarChart);// listen to an event for a query response after requesting it
 
 
     //sample function to send a query
-    function sendQuery(data) {
-        console.log('client received initial message');
+    function sendPieYearQuery(data) {
+        console.log(' query sent for pie chart');
         console.log(data);//data contains the message contents
-        socket.emit('year query request', { year: '1950' });
+        socket.emit('year query request', data);
     }
+
+
     //sample function to do stuff with the data after receiving them from the query response
-    function createGraph(data){
+    function createPieChart(data){
         console.log('received query response');
         console.log('Creating a graph with: ' + JSON.stringify(data));//data contains the message contents
+        var graphData = []
+        data.forEach(function (d) {
+//            var label = d.key;
+//            var value = d.doc_count;
+            var obj = {label: d.key, value: d.doc_count}
+            graphData.push(obj)
+        });
+        console.log('graph data:')
+        console.log(graphData)
+        change(graphData)
     }
-    
+
+    function createBarChart(data) {
+        console.log('received bar query response');
+        console.log('Creating a bar graph with: ' + JSON.stringify(data));//data contains the message contents
+        //call function to create chart
+    }
+
+
 </script>
 
 
-
-<p>STUFF</p>
 
 
 </body>
