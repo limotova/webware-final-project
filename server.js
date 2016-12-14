@@ -64,8 +64,14 @@ var server = http.createServer(function (req, res){
   case '/':
     sendFile(res, 'index.html')
     break
+  case 'readme.json':
+    sendFile(res, 'readme.json', 'application/json')
+    break
   case '/index.html':
     sendFile(res, 'index.html')
+    break
+  case '/index2.html':
+    sendFile(res, 'index2.html')
     break
   case '/README.md':
     sendFile(res, 'README.md', 'text/md')
@@ -162,6 +168,7 @@ function barGraphByDecades(){
   }); 
 }
 
+
 function topTitleWords(min_year, max_year){
   client.search({
     index: 'million_songs', 
@@ -178,7 +185,7 @@ function topTitleWords(min_year, max_year){
       size: 0,
       aggs: {
         top_title_words: {
-          terms: {
+          significant_terms: {    // FIX THIS MAYBE
             field: "title",   // change this to whatever field
             size: 10          // top 10 most common
           }
