@@ -157,6 +157,7 @@ function barGraphByDecades(){
     }
   }).then(function (resp){
     console.log(resp)
+    barYearQueryEmitter(resp);
   }, function (err){
     console.trace(err.message);
   }); 
@@ -180,13 +181,14 @@ function topTitleWords(min_year, max_year){
         top_title_words: {
           terms: {
             field: "title",   // change this to whatever field
-            size: 10          // top 10 most common
+            size: 15          // top 10 most common
           }
         }
       }
     }
   }).then(function (resp){
-    console.log(resp.aggregations.top_title_words.buckets)
+    //console.log(resp.aggregations.top_title_words.buckets)
+    pieYearQueryEmitter( resp.aggregations.top_title_words.buckets);
     // top words are in key, doc_count == number of times they show up
   }, function (err){
     console.trace(err.message);
@@ -202,14 +204,45 @@ function topTitleWords(min_year, max_year){
   io.on('connection', function (socket) {//what to do on starting the connection
     console.log('connected!!');
     socket.emit('I am born', { hello: 'world' });//send a message to the client with the event 'I am born'
-    socket.on('year query request',yearQuery );//listen for the event 'year event' for messages, then run yearQuery
+    socket.on('pie year query request',pieYearQuery );//listen for the event 'pie year query' for messages, then run pieYearQuery
+    socket.on('bar year query request',barYearQuery );//listen for the event 'pie year query' for messages, then run pieYearQuery
   });
+
+
+
+
+
+function barYearQuery() {
+  console.log('recieved a bar year request');
+  barGraphByDecades();
+}
+
+function barYearQueryEmitter(result) {
+  console.log('I got a bar result')
+  console.log(result);
+  // var queryResult = {'result': data};
+  io.emit('bar year query response', result);//send a message from within a function
+}
+
+
+
+
+
+
 
   //a sample function to show that data can be received from the client and processed,
   //and then results are sent back to the client
-  function yearQuery(data) {
-    console.log('I got a year')
+  function pieYearQuery(data) {
+    console.log('recieved a year query');
     console.log(data);
-    var queryResult = {'result': data};
-    io.emit('year query response', queryResult);//send a message from within a function
+    var num1 = parseInt(data)
+    var num2 = num1 +10;
+    topTitleWords(num1, num2);
+  }
+  function pieYearQueryEmitter(result) {
+    console.log('I got a result')
+    console.log(result);
+    // var queryResult = {'result': data};
+    io.emit('year query response', result);//send a message from within a function
+
   }

@@ -1,42 +1,1086 @@
 <!--just an empty index file 3: -->
 <html>
 <head>
-    <script src="/socket.io/socket.io.js"></script>
+
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<!-- style for pie chart
+    <style>
+
+        #pieChart {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            width: 960px;
+            height: 500px;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        path.slice{
+            stroke-width:2px;
+        }
+
+        polyline{
+            opacity: .3;
+            stroke: black;
+            stroke-width: 2px;
+            fill: none;
+        }
+
+        .labelValue
+        {
+            font-size: 100%;
+            opacity: .5;
+            color: white;
+
+        }
+
+        .toolTip {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            position: absolute;
+            display: none;
+            width: auto;
+            height: auto;
+            background: none repeat scroll 0 0 white;
+            border: 0 none;
+            border-radius: 8px 8px 8px 8px;
+            box-shadow: -3px 3px 15px #888888;
+            color: white;
+            font: 12px sans-serif;
+            padding: 5px;
+            text-align: center;
+        }
+        .text {
+            font: 12px sans-serif;
+            color: white;
+        }
+    </style>
+-->
+
+<!--Style for bar chart
+
+    <style type="text/css">
+
+        text {
+            font: 10px sans-serif;
+        }
+
+        rect.background {
+            fill: white;
+        }
+
+        .axis {
+            shape-rendering: crispEdges;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+        }
+
+
+    </style>
+-->
+
+<!-- style for bootstrp divs and navbar
+    <style>
+        body {
+            position: relative;
+        }
+        #word {padding-top:50px;height:750px;color: #fff; background-color: #35478C;}
+        #fade {padding-top:50px;height:750px;color: #fff; background-color: #4E7AC7;}
+        #loud {padding-top:50px;height:750px;color: #fff; background-color: #7FB2F0;}
+        #topNav {background-color: #16193B;}
+    </style>
+-->
+<!-- style for scatter plot-->
+
+<style>
+    body {
+        font-family:"Helvetica Neue";
+        color: #686765;
+    }
+    .name {
+        float:right;
+        color:#27aae1;
+    }
+    .axis {
+        fill: none;
+        stroke: #AAA;
+        stroke-width: 1px;
+    }
+    text {
+        stroke: none;
+        fill: #666666;
+        font-size: .6em;
+        font-family:"Helvetica Neue"
+    }
+    .label {
+        fill: #414241;
+    }
+    .node {
+        cursor:pointer;
+    }
+    .dot {
+        opacity: .7;
+        cursor: pointer;
+    }
+</style>
+
+
+
 </head>
 
 
 
-
-
+<!-->
 <body>
+<!--
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+-->
+
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+<!--
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+-->
+
+<!--
+
+<nav class="navbar navbar-inverse navbar-fixed-top" id="topNav">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">SongStats</a>
+        </div>
+        <div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="#word">Words</a></li>
+                    <li><a href="#fade">Fades</a></li>
+                    <li><a href="#loud">Loudness</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div id="word" class="container-fluid">
+    <h1>Most Used Words in Songs</h1>
+    <div id ="pieChart">
+        <input name="dataset" id="dataset" type="range" min="1920" max="2000" value="1920" step="10" onchange="showValue(this.value)" />
+        <span id="range">1920</span>
+    </div>
+
+</div>
+<div id="fade" class="container-fluid">
+    <h1>Fade in and out times in songs</h1>
+</div>
+
+<div id="loud" class="container-fluid">
+    <h1>Loudness of songs</h1>
+    <div class="someclass">
+        <h2>Create A Bar Chart With D3 JavaScript</h2>
+        <div id="bar-chart">
+
+        </div>
+    </div>
+</div>
+-->
+
+<!-- slider for pie chart-->
+<script>
+    function showValue(newValue)
+    {
+        document.getElementById("range").innerHTML=newValue;
+    }
+</script>
+
+<!-- code for pie chart-->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<!--
+<script>
+    d3.select("input[value=\"total\"]").property("checked", true);
+
+    var svg = d3.select("#pieChart")
+            .append("svg")
+            .append("g")
+
+    svg.append("g")
+            .attr("class", "slices");
+    svg.append("g")
+            .attr("class", "labelName");
+    svg.append("g")
+            .attr("class", "labelValue");
+    svg.append("g")
+            .attr("class", "lines");
+
+    var width = 960,
+            height = 450,
+            radius = Math.min(width, height) / 2;
+
+    var pie = d3.layout.pie()
+            .sort(null)
+            .value(function(d) {
+                return d.value;
+            });
+
+    var arc = d3.svg.arc()
+            .outerRadius(radius * 0.8)
+            .innerRadius(radius * 0.3);
+
+    var outerArc = d3.svg.arc()
+            .innerRadius(radius * 0.7)
+            .outerRadius(radius * 0.9);
+
+    var legendRectSize = (radius * 0.05);
+    var legendSpacing = radius * 0.02;
+
+
+    var div = d3.select("#pieChart").append("div").attr("class", "toolTip");
+
+    svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var colorRange = d3.scale.category20();
+    var color = d3.scale.ordinal()
+            .range(colorRange.range());
+
+
+//    datasetTotal = [
+//        {label:"Category 1", value:19},
+//        {label:"Category 2", value:5},
+//        {label:"Category 3", value:13},
+//        {label:"Category 4", value:17},
+//        {label:"Category 5", value:19},
+//        {label:"Category 6", value:27}
+//    ];
+//
+//    datasetOption1 = [
+//        {label:"Category 1", value:22},
+//        {label:"Category 2", value:33},
+//        {label:"Category 3", value:4},
+//        {label:"Category 4", value:15},
+//        {label:"Category 5", value:36},
+//        {label:"Category 6", value:0}
+//    ];
+//
+//    datasetOption2 = [
+//        {label:"Category 1", value:10},
+//        {label:"Category 2", value:20},
+//        {label:"Category 3", value:30},
+//        {label:"Category 4", value:5},
+//        {label:"Category 5", value:12},
+//        {label:"Category 6", value:23}
+//    ];
+
+   // change(datasetTotal);
+    function initPie(){
+        sendPieYearQuery(1920);
+    }
+    //initPie()
+    d3.selectAll("input")
+            .on("change", selectDataset);
+
+    function selectDataset()
+    {
+        var value = this.value;
+        sendPieYearQuery(value);
+    }
+
+    function change(data) {
+
+        /* ------- PIE SLICES -------*/
+        var slice = svg.select(".slices").selectAll("path.slice")
+                .data(pie(data), function(d){ return d.data.label });
+
+        slice.enter()
+                .insert("path")
+                .style("fill", function(d) { return color(d.data.label); })
+                .attr("class", "slice");
+
+        slice
+                .transition().duration(1000)
+                .attrTween("d", function(d) {
+                    this._current = this._current || d;
+                    var interpolate = d3.interpolate(this._current, d);
+                    this._current = interpolate(0);
+                    return function(t) {
+                        return arc(interpolate(t));
+                    };
+                })
+        slice
+                .on("mousemove", function(d){
+                    div.style("left", d3.event.pageX+10+"px");
+                    div.style("top", d3.event.pageY-25+"px");
+                    div.style("display", "inline-block");
+                    div.html((d.data.label)+"<br>"+(d.data.value));
+                });
+        slice
+                .on("mouseout", function(d){
+                    div.style("display", "none");
+                });
+
+        slice.exit()
+                .remove();
+//LEGEND CODE
+//        var legend = svg.selectAll('.legend')
+//                .data(color.domain())
+//                .enter()
+//                .append('g')
+//                .attr('class', 'legend')
+//                .attr('transform', function(d, i) {
+//                    var height = legendRectSize + legendSpacing;
+//                    var offset =  height * color.domain().length / 2;
+//                    var horz = -3 * legendRectSize;
+//                    var vert = i * height - offset;
+//                    return 'translate(' + horz + ',' + vert + ')';
+//                });
+//
+//        legend.append('rect')
+//                .attr('width', legendRectSize)
+//                .attr('height', legendRectSize)
+//                .style('fill', color)
+//                .style('stroke', color);
+//
+//        legend.append('text')
+//                .attr('x', legendRectSize + legendSpacing)
+//                .attr('y', legendRectSize - legendSpacing)
+//                .text(function(d) { return d; });
+
+        /* ------- TEXT LABELS -------*/
+
+        var text = svg.select(".labelName").selectAll("text")
+                .data(pie(data), function(d){ return d.data.label });
+
+        text.enter()
+                .append("text")
+                .attr("dy", ".35em")
+                .text(function(d) {
+                    return (d.data.label+": "+d.value);
+                });
+
+        function midAngle(d){
+            return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+
+        text
+                .transition().duration(1000)
+                .attrTween("transform", function(d) {
+                    this._current = this._current || d;
+                    var interpolate = d3.interpolate(this._current, d);
+                    this._current = interpolate(0);
+                    return function(t) {
+                        var d2 = interpolate(t);
+                        var pos = outerArc.centroid(d2);
+                        pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+                        return "translate("+ pos +")";
+                    };
+                })
+                .styleTween("text-anchor", function(d){
+                    this._current = this._current || d;
+                    var interpolate = d3.interpolate(this._current, d);
+                    this._current = interpolate(0);
+                    return function(t) {
+                        var d2 = interpolate(t);
+                        return midAngle(d2) < Math.PI ? "start":"end";
+                    };
+                })
+                .text(function(d) {
+                    return (d.data.label+": "+d.value);
+                });
+
+
+        text.exit()
+                .remove();
+
+        /* ------- SLICE TO TEXT POLYLINES -------*/
+
+        var polyline = svg.select(".lines").selectAll("polyline")
+                .data(pie(data), function(d){ return d.data.label });
+
+        polyline.enter()
+                .append("polyline");
+
+        polyline.transition().duration(1000)
+                .attrTween("points", function(d){
+                    this._current = this._current || d;
+                    var interpolate = d3.interpolate(this._current, d);
+                    this._current = interpolate(0);
+                    return function(t) {
+                        var d2 = interpolate(t);
+                        var pos = outerArc.centroid(d2);
+                        pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+                        return [arc.centroid(d2), outerArc.centroid(d2), pos];
+                    };
+                });
+
+        polyline.exit()
+                .remove();
+    };
+
+</script>
+-->
+
+
+
+<!-- scatter plot code-->
+<div id="scatter-load"></div>
+
+
+<script>
+    var chocolates = [{
+        "name": "Dairy Milk",
+        "manufacturer": "cadbury",
+        "price": 45,
+        "rating": 2
+    }, {
+        "name": "Galaxy",
+        "manufacturer": "Nestle",
+        "price": 42,
+        "rating": 3
+    }, {
+        "name": "Lindt",
+        "manufacturer": "Lindt",
+        "price": 80,
+        "rating": 4
+    }, {
+        "name": "Hershey",
+        "manufacturer": "Hershey",
+        "price": 40,
+        "rating": 1
+    }, {
+        "name": "Dolfin",
+        "manufacturer": "Lindt",
+        "price": 90,
+        "rating": 5
+    }, {
+        "name": "Bournville",
+        "manufacturer": "cadbury",
+        "price": 70,
+        "rating": 2
+    }];
+
+    // call the method below
+    showScatterPlot(chocolates);
+
+    function showScatterPlot(data) {
+        // just to have some space around items.
+        var margins = {
+            "left": 40,
+            "right": 30,
+            "top": 30,
+            "bottom": 30
+        };
+
+        var width = 500;
+        var height = 500;
+
+        // this will be our colour scale. An Ordinal scale.
+        var colors = d3.scale.category10();
+
+        // we add the SVG component to the scatter-load div
+        var svg = d3.select("#scatter-load").append("svg").attr("width", width).attr("height", height).append("g")
+                .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
+
+        // this sets the scale that we're using for the X axis.
+        // the domain define the min and max variables to show. In this case, it's the min and max prices of items.
+        // this is made a compact piece of code due to d3.extent which gives back the max and min of the price variable within the dataset
+        var x = d3.scale.linear()
+                .domain(d3.extent(data, function (d) {
+                    return d.price;
+                }))
+                // the range maps the domain to values from 0 to the width minus the left and right margins (used to space out the visualization)
+                .range([0, width - margins.left - margins.right]);
+
+        // this does the same as for the y axis but maps from the rating variable to the height to 0.
+        var y = d3.scale.linear()
+                .domain(d3.extent(data, function (d) {
+                    return d.rating;
+                }))
+                // Note that height goes first due to the weird SVG coordinate system
+                .range([height - margins.top - margins.bottom, 0]);
+
+        // we add the axes SVG component. At this point, this is just a placeholder. The actual axis will be added in a bit
+        svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + y.range()[0] + ")");
+        svg.append("g").attr("class", "y axis");
+
+        // this is our X axis label. Nothing too special to see here.
+        svg.append("text")
+                .attr("fill", "#414241")
+                .attr("text-anchor", "end")
+                .attr("x", width / 2)
+                .attr("y", height - 35)
+                .text("Price in pence (£)");
+
+
+        // this is the actual definition of our x and y axes. The orientation refers to where the labels appear - for the x axis, below or above the line, and for the y axis, left or right of the line. Tick padding refers to how much space between the tick and the label. There are other parameters too - see https://github.com/mbostock/d3/wiki/SVG-Axes for more information
+        var xAxis = d3.svg.axis().scale(x).orient("bottom").tickPadding(2);
+        var yAxis = d3.svg.axis().scale(y).orient("left").tickPadding(2);
+
+        // this is where we select the axis we created a few lines earlier. See how we select the axis item. in our svg we appended a g element with a x/y and axis class. To pull that back up, we do this svg select, then 'call' the appropriate axis object for rendering.
+        svg.selectAll("g.y.axis").call(yAxis);
+        svg.selectAll("g.x.axis").call(xAxis);
+
+        // now, we can get down to the data part, and drawing stuff. We are telling D3 that all nodes (g elements with class node) will have data attached to them. The 'key' we use (to let D3 know the uniqueness of items) will be the name. Not usually a great key, but fine for this example.
+        var chocolate = svg.selectAll("g.node").data(data, function (d) {
+            return d.name;
+        });
+
+        // we 'enter' the data, making the SVG group (to contain a circle and text) with a class node. This corresponds with what we told the data it should be above.
+
+        var chocolateGroup = chocolate.enter().append("g").attr("class", "node")
+        // this is how we set the position of the items. Translate is an incredibly useful function for rotating and positioning items
+                .attr('transform', function (d) {
+                    return "translate(" + x(d.price) + "," + y(d.rating) + ")";
+                });
+
+        // we add our first graphics element! A circle!
+        chocolateGroup.append("circle")
+                .attr("r", 5)
+                .attr("class", "dot")
+                .style("fill", function (d) {
+                    // remember the ordinal scales? We use the colors scale to get a colour for our manufacturer. Now each node will be coloured
+                    // by who makes the chocolate.
+                    return colors(d.manufacturer);
+                });
+
+        // now we add some text, so we can see what each item is.
+        chocolateGroup.append("text")
+                .style("text-anchor", "middle")
+                .attr("dy", -10)
+                .text(function (d) {
+                    // this shouldn't be a surprising statement.
+                    return d.name;
+                });
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- another bar chart
+<script>
+
+    var margin = {top: 30, right: 120, bottom: 0, left: 120},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+    var x = d3.scale.linear()
+            .range([0, width]);
+
+    var barHeight = 20;
+
+    var color = d3.scale.ordinal()
+            .range(["steelblue", "#ccc"]);
+
+    var duration = 750,
+            delay = 25;
+
+    var partition = d3.layout.partition()
+            .value(function(d) { return d.size; });
+
+    var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("top");
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("rect")
+            .attr("class", "background")
+            .attr("width", width)
+            .attr("height", height)
+            .on("click", up);
+
+    svg.append("g")
+            .attr("class", "x axis");
+
+    svg.append("g")
+            .attr("class", "y axis")
+            .append("line")
+            .attr("y1", "100%");
+
+    d3.json("readme.json", function(error, root) {
+        if (error) throw error;
+
+        partition.nodes(root);
+        x.domain([0, root.value]).nice();
+        down(root, 0);
+    });
+
+    function down(d, i) {
+        if (!d.children || this.__transition__) return;
+        var end = duration + d.children.length * delay;
+
+        // Mark any currently-displayed bars as exiting.
+        var exit = svg.selectAll(".enter")
+                .attr("class", "exit");
+
+        // Entering nodes immediately obscure the clicked-on bar, so hide it.
+        exit.selectAll("rect").filter(function(p) { return p === d; })
+                .style("fill-opacity", 1e-6);
+
+        // Enter the new bars for the clicked-on data.
+        // Per above, entering bars are immediately visible.
+        var enter = bar(d)
+                .attr("transform", stack(i))
+                .style("opacity", 1);
+
+        // Have the text fade-in, even though the bars are visible.
+        // Color the bars as parents; they will fade to children if appropriate.
+        enter.select("text").style("fill-opacity", 1e-6);
+        enter.select("rect").style("fill", color(true));
+
+        // Update the x-scale domain.
+        x.domain([0, d3.max(d.children, function(d) { return d.value; })]).nice();
+
+        // Update the x-axis.
+        svg.selectAll(".x.axis").transition()
+                .duration(duration)
+                .call(xAxis);
+
+        // Transition entering bars to their new position.
+        var enterTransition = enter.transition()
+                .duration(duration)
+                .delay(function(d, i) { return i * delay; })
+                .attr("transform", function(d, i) { return "translate(0," + barHeight * i * 1.2 + ")"; });
+
+        // Transition entering text.
+        enterTransition.select("text")
+                .style("fill-opacity", 1);
+
+        // Transition entering rects to the new x-scale.
+        enterTransition.select("rect")
+                .attr("width", function(d) { return x(d.value); })
+                .style("fill", function(d) { return color(!!d.children); });
+
+        // Transition exiting bars to fade out.
+        var exitTransition = exit.transition()
+                .duration(duration)
+                .style("opacity", 1e-6)
+                .remove();
+
+        // Transition exiting bars to the new x-scale.
+        exitTransition.selectAll("rect")
+                .attr("width", function(d) { return x(d.value); });
+
+        // Rebind the current node to the background.
+        svg.select(".background")
+                .datum(d)
+                .transition()
+                .duration(end);
+
+        d.index = i;
+    }
+
+    function up(d) {
+        if (!d.parent || this.__transition__) return;
+        var end = duration + d.children.length * delay;
+
+        // Mark any currently-displayed bars as exiting.
+        var exit = svg.selectAll(".enter")
+                .attr("class", "exit");
+
+        // Enter the new bars for the clicked-on data's parent.
+        var enter = bar(d.parent)
+                .attr("transform", function(d, i) { return "translate(0," + barHeight * i * 1.2 + ")"; })
+                .style("opacity", 1e-6);
+
+        // Color the bars as appropriate.
+        // Exiting nodes will obscure the parent bar, so hide it.
+        enter.select("rect")
+                .style("fill", function(d) { return color(!!d.children); })
+                .filter(function(p) { return p === d; })
+                .style("fill-opacity", 1e-6);
+
+        // Update the x-scale domain.
+        x.domain([0, d3.max(d.parent.children, function(d) { return d.value; })]).nice();
+
+        // Update the x-axis.
+        svg.selectAll(".x.axis").transition()
+                .duration(duration)
+                .call(xAxis);
+
+        // Transition entering bars to fade in over the full duration.
+        var enterTransition = enter.transition()
+                .duration(end)
+                .style("opacity", 1);
+
+        // Transition entering rects to the new x-scale.
+        // When the entering parent rect is done, make it visible!
+        enterTransition.select("rect")
+                .attr("width", function(d) { return x(d.value); })
+                .each("end", function(p) { if (p === d) d3.select(this).style("fill-opacity", null); });
+
+        // Transition exiting bars to the parent's position.
+        var exitTransition = exit.selectAll("g").transition()
+                .duration(duration)
+                .delay(function(d, i) { return i * delay; })
+                .attr("transform", stack(d.index));
+
+        // Transition exiting text to fade out.
+        exitTransition.select("text")
+                .style("fill-opacity", 1e-6);
+
+        // Transition exiting rects to the new scale and fade to parent color.
+        exitTransition.select("rect")
+                .attr("width", function(d) { return x(d.value); })
+                .style("fill", color(true));
+
+        // Remove exiting nodes when the last child has finished transitioning.
+        exit.transition()
+                .duration(end)
+                .remove();
+
+        // Rebind the current parent to the background.
+        svg.select(".background")
+                .datum(d.parent)
+                .transition()
+                .duration(end);
+    }
+
+    // Creates a set of bars for the given data node, at the specified index.
+    function bar(d) {
+        var bar = svg.insert("g", ".y.axis")
+                .attr("class", "enter")
+                .attr("transform", "translate(0,5)")
+                .selectAll("g")
+                .data(d.children)
+                .enter().append("g")
+                .style("cursor", function(d) { return !d.children ? null : "pointer"; })
+                .on("click", down);
+
+        bar.append("text")
+                .attr("x", -6)
+                .attr("y", barHeight / 2)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function(d) { return d.name; });
+
+        bar.append("rect")
+                .attr("width", function(d) { return x(d.value); })
+                .attr("height", barHeight);
+
+        return bar;
+    }
+
+    // A stateful closure for stacking bars horizontally.
+    function stack(i) {
+        var x0 = 0;
+        return function(d) {
+            var tx = "translate(" + x0 + "," + barHeight * i * 1.2 + ")";
+            x0 += x(d.value);
+            return tx;
+        };
+    }
+
+</script>
+-->
+<!-- bar chart working
+<script>
+
+    var chartdata = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
+        135, 150, 165, 180, 200, 220, 240, 270, 300, 330, 370, 410];
+
+    var margin = {top: 30, right: 10, bottom: 30, left: 50}
+
+    var height = 400 - margin.top - margin.bottom,
+            width = 720 - margin.left - margin.right,
+            barWidth = 40,
+            barOffset = 20;
+
+    var dynamicColor;
+
+    var yScale = d3.scale.linear()
+            .domain([0, d3.max(chartdata)])
+            .range([0, height])
+
+    var xScale = d3.scale.ordinal()
+            .domain(d3.range(0, chartdata.length))
+            .rangeBands([0, width])
+
+    var colors = d3.scale.linear()
+            .domain([0, chartdata.length * .33, chartdata.length * .66, chartdata.length])
+            .range(['#d6e9c6', '#bce8f1', '#faebcc', '#ebccd1'])
+
+    var awesome = d3.select('#bar-chart').append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .style('background', '#bce8f1')
+            .append('g')
+            .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
+            .selectAll('rect').data(chartdata)
+            .enter().append('rect')
+            .style({
+                'fill': function (data, i) {
+                    return colors(i);
+                }, 'stroke': '#31708f', 'stroke-width': '5'
+            })
+            .attr('width', xScale.rangeBand())
+            .attr('x', function (data, i) {
+                return xScale(i);
+            })
+            .attr('height', 0)
+            .attr('y', height)
+            .on('mouseover', function (data) {
+                dynamicColor = this.style.fill;
+                d3.select(this)
+                        .style('fill', '#3c763d')
+            })
+
+            .on('mouseout', function (data) {
+                d3.select(this)
+                        .style('fill', dynamicColor)
+            })
+
+    awesome.transition()
+            .attr('height', function (data) {
+                return yScale(data);
+            })
+            .attr('y', function (data) {
+                return height - yScale(data);
+            })
+            .delay(function (data, i) {
+                return i * 20;
+            })
+            .duration(2000)
+            .ease('elastic')
+
+    var verticalGuideScale = d3.scale.linear()
+            .domain([0, d3.max(chartdata)])
+            .range([height, 0])
+
+    var vAxis = d3.svg.axis()
+            .scale(verticalGuideScale)
+            .orient('left')
+            .ticks(10)
+
+    var verticalGuide = d3.select('svg').append('g')
+    vAxis(verticalGuide)
+    verticalGuide.attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
+    verticalGuide.selectAll('path')
+            .style({fill: 'none', stroke: "#3c763d"})
+    verticalGuide.selectAll('line')
+            .style({stroke: "#3c763d"})
+
+    var hAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient('bottom')
+            .ticks(chartdata.size)
+
+    var horizontalGuide = d3.select('svg').append('g')
+    hAxis(horizontalGuide)
+    horizontalGuide.attr('transform', 'translate(' + margin.left + ', ' + (height + margin.top) + ')')
+    horizontalGuide.selectAll('path')
+            .style({fill: 'none', stroke: "#3c763d"})
+    horizontalGuide.selectAll('line')
+            .style({stroke: "#3c763d"});
+</script>
+-->
+
+<!-- script and div for d3 bar chart
+<script>
+
+
+    var chartdata = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
+        135, 150, 165, 180, 200, 220, 240, 270, 300, 330, 370, 410
+    ];
+
+    var margin = {
+        top: 30,
+        right: 10,
+        bottom: 30,
+        left: 50
+    }
+
+    var height = 400 - margin.top - margin.bottom,
+            width = 720 - margin.left - margin.right,
+            barWidth = 40,
+            barOffset = 20;
+
+    var dynamicColor;
+
+    var yScale = d3.scaleLinear()
+            .domain([0, d3.max(chartdata)])
+            .range([0, height])
+
+    var xScale = d3.scaleBand()
+            .domain(d3.range(0, chartdata.length))
+            .range([0, width])
+
+    var colors = d3.scaleLinear()
+            .domain([0, chartdata.length * .33, chartdata.length * .66, chartdata.length])
+            .range(['#d6e9c6', '#bce8f1', '#faebcc', '#ebccd1'])
+
+    var awesome = d3.select('#bar-chart').append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .style('background', '#bce8f1')
+            .append('g')
+            .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
+            .selectAll('rect').data(chartdata)
+            .enter().append('rect')
+            .styles({
+                'fill': function(data, i) {
+                    return colors(i);
+                },
+                'stroke': '#31708f',
+                'stroke-width': '1'
+            })
+            .attr('width', xScale.bandwidth())
+            .attr('x', function(data, i) {
+                return xScale(i);
+            })
+            .attr('height', 0)
+            .attr('y', height)
+            .on('mouseover', function(data) {
+                dynamicColor = this.style.fill;
+                d3.select(this)
+                        .style('fill', '#3c763d')
+            })
+
+            .on('mouseout', function(data) {
+                d3.select(this)
+                        .style('fill', dynamicColor)
+            })
+
+    awesome.transition()
+            .attr('height', function(data) {
+                return yScale(data);
+            })
+            .attr('y', function(data) {
+                return height - yScale(data);
+            })
+            .delay(function(data, i) {
+                return i * 20;
+            })
+            .duration(2000)
+            .ease(d3.easeElastic)
+
+    var verticalGuideScale = d3.scaleLinear()
+            .domain([0, d3.max(chartdata)])
+            .range([height, 0])
+
+    var vAxis = d3.axisLeft(verticalGuideScale)
+            .ticks(10)
+
+    var verticalGuide = d3.select('svg').append('g')
+    vAxis(verticalGuide)
+    verticalGuide.attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
+    verticalGuide.selectAll('path')
+            .styles({
+                fill: 'none',
+                stroke: "#3c763d"
+            })
+    verticalGuide.selectAll('line')
+            .styles({
+                stroke: "#3c763d"
+            })
+
+    var hAxis = d3.axisBottom(xScale)
+            .ticks(chartdata.size)
+
+    var horizontalGuide = d3.select('svg').append('g')
+    hAxis(horizontalGuide)
+    horizontalGuide.attr('transform', 'translate(' + margin.left + ', ' + (height + margin.top) + ')')
+    horizontalGuide.selectAll('path')
+            .styles({
+                fill: 'none',
+                stroke: "#3c763d"
+            })
+    horizontalGuide.selectAll('line')
+            .styles({
+                stroke: "#3c763d"
+            });
+
+
+</script>
+-->
+
 
 <script>
     var socket = io();//init socket.io on client
 
 
-    socket.on('I am born', sendQuery);//listen to 'I am born' event, first event upon connection
+    socket.on('I am born', function(){
+        console.log('INIT client pie chart');
+        socket.emit('pie year query request', 1920);
+        socket.emit('bar year query request');
+    });//listen to 'I am born' event, first event upon connection
 
-    socket.on('year query response', createGraph);// listen to an event for a query response after requesting it
+    socket.on('pie year query response', createPieChart);// listen to an event for a query response after requesting it
+    socket.on('bar year query response', createBarChart);// listen to an event for a query response after requesting it
 
 
     //sample function to send a query
-    function sendQuery(data) {
-        console.log('client received initial message');
+    function sendPieYearQuery(data) {
+        console.log(' query sent for pie chart');
         console.log(data);//data contains the message contents
-        socket.emit('year query request', { year: '1950' });
+        socket.emit('year query request', data);
     }
+
+
     //sample function to do stuff with the data after receiving them from the query response
-    function createGraph(data){
+    function createPieChart(data){
         console.log('received query response');
         console.log('Creating a graph with: ' + JSON.stringify(data));//data contains the message contents
+        var graphData = []
+        data.forEach(function (d) {
+//            var label = d.key;
+//            var value = d.doc_count;
+            var obj = {label: d.key, value: d.doc_count}
+            graphData.push(obj)
+        });
+        console.log('graph data:')
+        console.log(graphData)
+        change(graphData)
     }
-    
+
+    function createBarChart(data) {
+        console.log('received bar query response');
+        console.log('Creating a bar graph with: ' + JSON.stringify(data));//data contains the message contents
+        //call function to create chart
+    }
+
+
 </script>
 
 
-
-<p>STUFF</p>
 
 
 </body>
