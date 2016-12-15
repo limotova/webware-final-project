@@ -70,9 +70,6 @@ var server = http.createServer(function (req, res){
   case '/index.html':
     sendFile(res, 'index.html')
     break
-  case '/index2.html':
-    sendFile(res, 'index2.html')
-    break
   case '/README.md':
     sendFile(res, 'README.md', 'text/md')
     break
@@ -101,7 +98,6 @@ function sendFile(res, filename, contentType){
 
 
 // SAMPLE FUNCTIONS START HERE:
-
 // NOTE: all min/max years are inclusive (for exclusive do gte-->gt and lte-->lt)
 // for most of these, also consider doing when the year is 0 (that's default/no year)
 function sampleScatterPlotByYears(min_year, max_year){
@@ -110,7 +106,7 @@ function sampleScatterPlotByYears(min_year, max_year){
     type: 'song',
     body: {
       _source: [
-        "song_hotttnesss",   // categories here
+        "song_hotttnesss",   // categories here, it's artist_hottnesss and song_hotttnesss
         "artist_familiarity"    
         // consider including artist name + song name so we can mouse over things maybe
       ],
@@ -131,7 +127,7 @@ function sampleScatterPlotByYears(min_year, max_year){
   })
 }
 
-function barGraphByDecades(){
+function barGraphByYears(){
   client.search({
     index: 'million_songs',
     type: 'song',
@@ -148,7 +144,7 @@ function barGraphByDecades(){
         by_year: {
           histogram: {
             field: "year",
-            interval: 10,     // 10 years
+            interval: 1,     // 10 years
             min_doc_count: 1  // don't return results unless there's at least 1 thing there
           }, 
           aggs: {
@@ -163,7 +159,7 @@ function barGraphByDecades(){
     }
   }).then(function (resp){
     console.log(resp)
-    barYearQueryEmitter(resp);
+    barYearQueryEmitter(resp.aggregations.by_year.buckets);
   }, function (err){
     console.trace(err.message);
   }); 
@@ -221,7 +217,7 @@ function topTitleWords(min_year, max_year){
 
 function barYearQuery() {
   console.log('recieved a bar year request');
-  barGraphByDecades();
+  barGraphByYears();
 }
 
 function barYearQueryEmitter(result) {
