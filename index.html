@@ -100,7 +100,7 @@
         fill: white;
         color: white;
         stroke: white;
-        stroke-width: 6px;
+        stroke-width: 3px;
     }
     text {
         stroke: none;
@@ -109,7 +109,7 @@
         font-family:"Helvetica Neue"
     }
     .label {
-        font-size: 24px;
+        font-size: 18px;
         fill: white;
         color: white;
     }
@@ -124,13 +124,23 @@
         font-size: 12px;
         color: white;
     }
+    
+    circle{
+      fill: white;
+    }
+    
+    #scatterDataset{
+      width: 900px;
+    }
+    
+    
 </style>
 
 <style>
     .tip {
         font-size: 20px;
         color: white;
-        position: relative;
+        position: absolute;
         pointer-events: none;
     }
 </style>
@@ -145,7 +155,7 @@
         }
         #word {padding-top:50px;height:800px;color: #fff; background-color: #35478C;}
         #famous {padding-top:50px;height:800px;color: #fff; background-color: #4E7AC7;}
-        #loud {padding-top:50px;height:800px;color: #fff; background-color: #7FB2F0;}
+        #hotttnesss {padding-top:50px;height:800px;color: #fff; background-color: #7FB2F0;}
         #topNav {background-color: #16193B;}
     </style>
 
@@ -153,11 +163,8 @@
 
 
 
-<!-->
-<body>
-<!--
+
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
--->
 
 <script src="/socket.io/socket.io.js"></script>
 
@@ -410,7 +417,7 @@ function barGraph(myjson, maxAvg){
                 <ul class="nav navbar-nav">
                     <li><a href="#word">Words</a></li>
                     <li><a href="#famous">Famous</a></li>
-                    <li><a href="#loud">Loudness</a></li>
+                    <li><a href="#hotttnesss">Hotttnesss</a></li>
                 </ul>
             </div>
         </div>
@@ -432,10 +439,9 @@ function barGraph(myjson, maxAvg){
     <div id="scatter-div"></div>
 </div>
 
-<div id="loud" class="container-fluid">
-    <h1>Loudness of songs</h1>
+<div id="hotttnesss" class="container-fluid">
+    <h1>Hotttnesss of songs</h1>
     <div class="someclass">
-        <h2>Create A Bar Chart With D3 JavaScript</h2>
         <div id="bar-chart">
 
         </div>
@@ -652,6 +658,7 @@ function barGraph(myjson, maxAvg){
 <!--Scatter plot code -->
 <script>
 
+        
         // size and margins for the chart
         var margin = {
                     top: 20,
@@ -660,6 +667,8 @@ function barGraph(myjson, maxAvg){
                     left: 60
                 }, width = 750 - margin.left - margin.right,
                 height = 600 - margin.top - margin.bottom;
+
+                
         var x = d3.scale.linear()
                 .domain([0, 1])
                 .range([0, width]);
@@ -734,16 +743,17 @@ function barGraph(myjson, maxAvg){
                 .attr("r", 6)
                 .style("opacity", 0.6)
                 .on('mouseover', function (d, i) {
+
                     tip.transition()
                             .duration(200)
                             .style("opacity", .9);
                     tip.html( "Artist: "+d.artist + "<br/>"  + "Song: " + d.song_title );
                     tip.style('border', '2px solid black')
                     tip.style('background-color', 'steelblue')
-
-                    tip.style('top', y(d.y) - 20 + 'px');
+                    tip.style('top', 1000 + y(d.y) + 'px');
                     tip.style('left', x(d.x) + 'px');
                     tip.style('display', 'block');
+                    
                 })
                 .on('mouseout', function (d, i) {
                     tip.transition()
@@ -886,6 +896,37 @@ function barGraph(myjson, maxAvg){
     }
 
 </script>
+    
+    
+    
+    <script>
+    $(document).ready(function(){
+      // Add scrollspy to <body>
+      $('body').scrollspy({target: ".navbar", offset: 50});   
+
+      // Add smooth scrolling on all links inside the navbar
+      $("#myNavbar a").on('click', function(event) {
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+          // Prevent default anchor click behavior
+          event.preventDefault();
+
+          // Store hash
+          var hash = this.hash;
+
+          // Using jQuery's animate() method to add smooth page scroll
+          // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+          $('html, body').animate({
+            scrollTop: $(hash).offset().top
+          }, 800, function(){
+   
+            // Add hash (#) to URL when done scrolling (default click behavior)
+            window.location.hash = hash;
+          });
+        }  // End if
+      });
+    });
+    </script>
 
 
 
