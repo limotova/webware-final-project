@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<!--style for bar graph
+<!--style for bar graph-->
     <style>
         /*THIS IS FOR THE BAR GRAPHS*/
 
@@ -35,7 +35,7 @@
         }
 
     </style>
--->
+
 
 <!-- style for pie chart-->
     <style>
@@ -164,7 +164,7 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script src="//d3js.org/d3.v3.min.js"></script>
-<!--
+
 <script>
 // BAR GRAPH SCRIPTS
  // THIS IS WHAT THE CONTENTS OF THE DATA WOULD GO INTO
@@ -391,7 +391,7 @@ function barGraph(myjson, maxAvg){
   }
 }
 </script>
--->
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -461,14 +461,11 @@ function barGraph(myjson, maxAvg){
 
 <!-- code for pie chart-->
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<!-->
 <script>
-   // d3.select("input[value=\"total\"]").property("checked", true);
-
+    d3.select("input[value=\"total\"]").property("checked", true);
     var svg = d3.select("#pieChart")
             .append("svg")
             .append("g")
-
     svg.append("g")
             .attr("class", "slices");
     svg.append("g")
@@ -477,58 +474,73 @@ function barGraph(myjson, maxAvg){
             .attr("class", "labelValue");
     svg.append("g")
             .attr("class", "lines");
-
     var width = 960,
             height = 450,
             radius = Math.min(width, height) / 2;
-
     var pie = d3.layout.pie()
             .sort(null)
             .value(function(d) {
-                return d.size;
+                return d.value;
             });
-
     var arc = d3.svg.arc()
             .outerRadius(radius * 0.8)
             .innerRadius(radius * 0.3);
-
     var outerArc = d3.svg.arc()
             .innerRadius(radius * 0.7)
             .outerRadius(radius * 0.9);
-
     var legendRectSize = (radius * 0.05);
     var legendSpacing = radius * 0.02;
-
-
     var div = d3.select("#pieChart").append("div").attr("class", "toolTip");
-
     svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
     var colorRange = d3.scale.category20();
     var color = d3.scale.ordinal()
             .range(colorRange.range());
-
-
-    d3.select("#dataset")
+    //    datasetTotal = [
+    //        {label:"Category 1", value:19},
+    //        {label:"Category 2", value:5},
+    //        {label:"Category 3", value:13},
+    //        {label:"Category 4", value:17},
+    //        {label:"Category 5", value:19},
+    //        {label:"Category 6", value:27}
+    //    ];
+    //
+    //    datasetOption1 = [
+    //        {label:"Category 1", value:22},
+    //        {label:"Category 2", value:33},
+    //        {label:"Category 3", value:4},
+    //        {label:"Category 4", value:15},
+    //        {label:"Category 5", value:36},
+    //        {label:"Category 6", value:0}
+    //    ];
+    //
+    //    datasetOption2 = [
+    //        {label:"Category 1", value:10},
+    //        {label:"Category 2", value:20},
+    //        {label:"Category 3", value:30},
+    //        {label:"Category 4", value:5},
+    //        {label:"Category 5", value:12},
+    //        {label:"Category 6", value:23}
+    //    ];
+    // change(datasetTotal);
+    function initPie(){
+        sendPieYearQuery(1920);
+    }
+    //initPie()
+    d3.selectAll("#dataset")
             .on("change", selectDataset);
-
     function selectDataset()
     {
         var value = this.value;
         sendPieYearQuery(value);
     }
-
     function change(data) {
-
         /* ------- PIE SLICES -------*/
         var slice = svg.select(".slices").selectAll("path.slice")
                 .data(pie(data), function(d){ return d.data.label });
-
         slice.enter()
                 .insert("path")
                 .style("fill", function(d) { return color(d.data.label); })
                 .attr("class", "slice");
-
         slice
                 .transition().duration(1000)
                 .attrTween("d", function(d) {
@@ -550,7 +562,6 @@ function barGraph(myjson, maxAvg){
                 .on("mouseout", function(d){
                     div.style("display", "none");
                 });
-
         slice.exit()
                 .remove();
 //LEGEND CODE
@@ -577,23 +588,18 @@ function barGraph(myjson, maxAvg){
 //                .attr('x', legendRectSize + legendSpacing)
 //                .attr('y', legendRectSize - legendSpacing)
 //                .text(function(d) { return d; });
-
         /* ------- TEXT LABELS -------*/
-
         var text = svg.select(".labelName").selectAll("text")
                 .data(pie(data), function(d){ return d.data.label });
-
         text.enter()
                 .append("text")
                 .attr("dy", ".35em")
                 .text(function(d) {
-                    return (d.data.label+": "+d.size);
+                    return (d.data.label+": "+d.value);
                 });
-
         function midAngle(d){
             return d.startAngle + (d.endAngle - d.startAngle)/2;
         }
-
         text
                 .transition().duration(1000)
                 .attrTween("transform", function(d) {
@@ -617,21 +623,15 @@ function barGraph(myjson, maxAvg){
                     };
                 })
                 .text(function(d) {
-                    return (d.data.label+": "+d.size);
+                    return (d.data.label+": "+d.value);
                 });
-
-
         text.exit()
                 .remove();
-
         /* ------- SLICE TO TEXT POLYLINES -------*/
-
         var polyline = svg.select(".lines").selectAll("polyline")
                 .data(pie(data), function(d){ return d.data.label });
-
         polyline.enter()
                 .append("polyline");
-
         polyline.transition().duration(1000)
                 .attrTween("points", function(d){
                     this._current = this._current || d;
@@ -644,12 +644,11 @@ function barGraph(myjson, maxAvg){
                         return [arc.centroid(d2), outerArc.centroid(d2), pos];
                     };
                 });
-
         polyline.exit()
                 .remove();
-    }
-
+    };
 </script>
+
 
 
 <!--Scatter plot code -->
@@ -763,7 +762,7 @@ function barGraph(myjson, maxAvg){
     socket.on('I am born', function(){
         console.log('INIT client pie chart');
         socket.emit('pie year query request', 1920);
-        //socket.emit('bar year query request');
+        socket.emit('bar year query request');
         socket.emit('scatter year query request', 1920);
 
     });//listen to 'I am born' event, first event upon connection
