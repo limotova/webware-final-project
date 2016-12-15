@@ -42,9 +42,11 @@
 
         #pieChart {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 20px;
             width: 960px;
             height: 500px;
             position: relative;
+
         }
 
         svg {
@@ -57,35 +59,25 @@
         }
 
         polyline{
-            opacity: .3;
-            stroke: black;
-            stroke-width: 2px;
+            opacity: .4;
+            stroke: white;
+            stroke-width: 5px;
             fill: none;
         }
 
         .labelValue
         {
-            font-size: 100%;
+            font-size: 20px;
             opacity: .5;
             color: white;
 
         }
-
-        .toolTip {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            position: absolute;
-            display: none;
-            width: auto;
-            height: auto;
-            background: none repeat scroll 0 0 white;
-            border: 0 none;
-            border-radius: 8px 8px 8px 8px;
-            box-shadow: -3px 3px 15px #888888;
+        .labelName{
+            font-size: 36px;
             color: white;
-            font: 12px sans-serif;
-            padding: 5px;
-            text-align: center;
         }
+
+
         .text {
             font: 12px sans-serif;
             color: white;
@@ -97,7 +89,7 @@
 <style>
     body {
         font-family:"Helvetica Neue";
-        color: #686765;
+        color: white;
 
     }
     .name {
@@ -105,19 +97,21 @@
         color:#27aae1;
     }
     .axis {
-        fill: none;
-        stroke: #AAA;
-        stroke-width: 1px;
+        fill: white;
+        color: white;
+        stroke: white;
+        stroke-width: 6px;
     }
     text {
         stroke: none;
-        fill: #666666;
-        font-size: .6em;
+        fill: white;
+        font-size: 22px;
         font-family:"Helvetica Neue"
     }
     .label {
-        fill: #414241;
-        text-anchor: start;
+        font-size: 24px;
+        fill: white;
+        color: white;
     }
     .node {
         cursor:pointer;
@@ -126,13 +120,17 @@
         opacity: .7;
         cursor: pointer;
     }
+    .main{
+        font-size: 12px;
+        color: white;
+    }
 </style>
 
 <style>
     .tip {
-        font-size: 12px;
+        font-size: 20px;
         color: white;
-        position: absolute;
+        position: relative;
         pointer-events: none;
     }
 </style>
@@ -145,9 +143,9 @@
         body {
             position: relative;
         }
-        #word {padding-top:50px;height:750px;color: #fff; background-color: #35478C;}
-        #famous {padding-top:50px;height:750px;color: #fff; background-color: #4E7AC7;}
-        #loud {padding-top:50px;height:750px;color: #fff; background-color: #7FB2F0;}
+        #word {padding-top:50px;height:800px;color: #fff; background-color: #35478C;}
+        #famous {padding-top:50px;height:800px;color: #fff; background-color: #4E7AC7;}
+        #loud {padding-top:50px;height:800px;color: #fff; background-color: #7FB2F0;}
         #topNav {background-color: #16193B;}
     </style>
 
@@ -551,17 +549,17 @@ function barGraph(myjson, maxAvg){
                         return arc(interpolate(t));
                     };
                 })
-        slice
-                .on("mousemove", function(d){
-                    div.style("left", d3.event.pageX+10+"px");
-                    div.style("top", d3.event.pageY-25+"px");
-                    div.style("display", "inline-block");
-                    div.html((d.data.label)+"<br>"+(d.data.value));
-                });
-        slice
-                .on("mouseout", function(d){
-                    div.style("display", "none");
-                });
+//        slice
+//                .on("mousemove", function(d){
+//                    div.style("left", d3.event.pageX+10+"px");
+//                    div.style("top", d3.event.pageY-25+"px");
+//                    div.style("display", "inline-block");
+//                    div.html((d.data.label)+"<br>"+(d.data.value));
+//                });
+//        slice
+//                .on("mouseout", function(d){
+//                    div.style("display", "none");
+//                });
         slice.exit()
                 .remove();
 //LEGEND CODE
@@ -660,8 +658,8 @@ function barGraph(myjson, maxAvg){
                     right: 15,
                     bottom: 60,
                     left: 60
-                }, width = 500 - margin.left - margin.right,
-                height = 400 - margin.top - margin.bottom;
+                }, width = 750 - margin.left - margin.right,
+                height = 600 - margin.top - margin.bottom;
         var x = d3.scale.linear()
                 .domain([0, 1])
                 .range([0, width]);
@@ -683,7 +681,8 @@ function barGraph(myjson, maxAvg){
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
                 .attr('width', width)
                 .attr('height', height)
-                .attr('class', 'main')
+                .attr('class', 'main');
+
         // draw the x axis
         var xAxis = d3.svg.axis()
                 .scale(x)
@@ -694,7 +693,7 @@ function barGraph(myjson, maxAvg){
                 .call(xAxis)
                 .append("text")
                 .attr("class", "label")
-                .attr('transform', 'translate(180,30)')
+                .attr('transform', 'translate(180,50)')
                 .text("Artist Hottnesss");
 
         // draw the y axis
@@ -707,11 +706,11 @@ function barGraph(myjson, maxAvg){
                 .call(yAxis)
                 .append("text")
                 .attr("class", "label")
-                .attr("transform", "rotate(90) translate(120,30)")
+                .attr("transform", "rotate(90) translate(150,60)")
                 .text("Artist Familiarity");
 
         // draw the graph object
-        var g = main.append("svg:g");
+
 
         d3.select("#scatterDataset")
                 .on("change", selectScatterDataset);
@@ -721,8 +720,9 @@ function barGraph(myjson, maxAvg){
             console.log('SCATTER INPUT UPDATING!!!!')
             sendScatterYearQuery(value);
         }
-
+        var g = main.append("svg:g");
         function scatterCreate(data) {
+            d3.selectAll('circle').remove()
             var points = g.selectAll("scatter-dots").data(data);
             points.enter().append("svg:circle")
                 .attr("cy", function (d) {
@@ -731,7 +731,7 @@ function barGraph(myjson, maxAvg){
                 .attr("cx", function (d, i) {
                     return x(d.x);
                 })
-                .attr("r", 3)
+                .attr("r", 6)
                 .style("opacity", 0.6)
                 .on('mouseover', function (d, i) {
                     tip.transition()
@@ -750,6 +750,8 @@ function barGraph(myjson, maxAvg){
                             .duration(500)
                             .style("opacity", 0);
                 });
+
+
 
     }
 </script>
