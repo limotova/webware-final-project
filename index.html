@@ -195,7 +195,7 @@ function barGraph(myjson, maxAvg){
 
   var xAxis = d3.svg.axis()
       .scale(x)
-      .orient("top");
+      .orient("bottom");
 
   var svg = d3.select("#bar-chart").append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -210,8 +210,21 @@ function barGraph(myjson, maxAvg){
       .on("click", up);
 
   svg.append("g")
-      .attr("class", "x axis");
+      .attr("class", "x axis")
+      .attr('transform', 'translate(0,' + height + ')')
+      .append("text")
+      .call(xAxis)
+      .attr("class", "label")
+      .attr('transform', 'translate(200,50)')
+      .text("Song Hotttnesss");
 
+  svg.append("g")
+      .attr("class", "y axis")
+      .append("text")
+      .call(yAxis)
+      .attr("class", "label")
+      .attr('transform', 'translate(-100,200)')
+      .text("Year");
   svg.append("g")
       .attr("class", "y axis")
     .append("line")
