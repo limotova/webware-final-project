@@ -99,13 +99,18 @@ function sendFile(res, filename, contentType){
 // NOTE: all min/max years are inclusive (for exclusive do gte-->gt and lte-->lt)
 // for most of these, also consider doing when the year is 0 (that's default/no year)
 function sampleScatterPlotByYears(min_year, max_year){
+  console.log('init search')
+  console.log(min_year + " " + max_year)
   client.search({
     index: 'million_songs',
     type: 'song',
     body: {
       _source: [
-        "song_hotttnesss",   // categories here
-        "artist_familiarity"    
+        "artist_hottnesss",   // !!!!hottnesss has two Ts and three Ss
+        "artist_familiarity",
+        "artist_name",
+        "title"
+
         // consider including artist name + song name so we can mouse over things maybe
       ],
       size: 10000, 
@@ -119,7 +124,8 @@ function sampleScatterPlotByYears(min_year, max_year){
       }
     }
   }).then(function (resp){
-    console.log(resp.hits.hits) // and then get whatever fields are relevant
+    //console.log(resp.hits.hits) // and then get whatever fields are relevant
+    scatterYearQueryEmitter(resp.hits.hits);
   }, function(err){
     console.trace(err.message)
   })
@@ -206,11 +212,31 @@ function topTitleWords(min_year, max_year){
     socket.emit('I am born', { hello: 'world' });//send a message to the client with the event 'I am born'
     socket.on('pie year query request',pieYearQuery );//listen for the event 'pie year query' for messages, then run pieYearQuery
     socket.on('bar year query request',barYearQuery );//listen for the event 'pie year query' for messages, then run pieYearQuery
+    socket.on('scatter year query request',scatterYearQuery );//listen for the event 'pie year query' for messages, then run pieYearQuery
   });
 
 
 
+function scatterYearQuery(data) {
+  console.log('recieved a scatter year query');
+  console.log(data);
+  var num1 = parseInt(data)
+  var num2 = num1 +10;
+  sampleScatterPlotByYears(num1, num2);
+}
+function scatterYearQueryEmitter(result) {
+  console.log('I got a scatter result')
+  var resultList = []
+  result.forEach(function(d){
+    if(d._source.artist_hottnesss){
+      resultList.push(d._source);
+    }
+  });
 
+  console.log(resultList);
+  // var queryResult = {'result': data};
+  io.emit('scatter year query response', resultList);//send a message from within a function
+}
 
 function barYearQuery() {
   console.log('recieved a bar year request');
@@ -224,25 +250,18 @@ function barYearQueryEmitter(result) {
   io.emit('bar year query response', result);//send a message from within a function
 }
 
-
-
-
-
-
-
   //a sample function to show that data can be received from the client and processed,
   //and then results are sent back to the client
   function pieYearQuery(data) {
-    console.log('recieved a year query');
+    console.log('recieved a pie year query');
     console.log(data);
     var num1 = parseInt(data)
     var num2 = num1 +10;
     topTitleWords(num1, num2);
   }
   function pieYearQueryEmitter(result) {
-    console.log('I got a result')
+    console.log('I got a pie result')
     console.log(result);
     // var queryResult = {'result': data};
-    io.emit('year query response', result);//send a message from within a function
-
+    io.emit('pie year query response', result);//send a message from within a function
   }
