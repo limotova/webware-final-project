@@ -64,6 +64,9 @@ var server = http.createServer(function (req, res){
   case '/':
     sendFile(res, 'index.html')
     break
+  case 'readme.json':
+    sendFile(res, 'readme.json', 'application/json')
+    break
   case '/index.html':
     sendFile(res, 'index.html')
     break
@@ -95,7 +98,6 @@ function sendFile(res, filename, contentType){
 
 
 // SAMPLE FUNCTIONS START HERE:
-
 // NOTE: all min/max years are inclusive (for exclusive do gte-->gt and lte-->lt)
 // for most of these, also consider doing when the year is 0 (that's default/no year)
 function sampleScatterPlotByYears(min_year, max_year){
@@ -110,8 +112,6 @@ function sampleScatterPlotByYears(min_year, max_year){
         "artist_familiarity",
         "artist_name",
         "title"
-
-        // consider including artist name + song name so we can mouse over things maybe
       ],
       size: 10000, 
       query: {
@@ -131,7 +131,7 @@ function sampleScatterPlotByYears(min_year, max_year){
   })
 }
 
-function barGraphByDecades(){
+function barGraphByYears(){
   client.search({
     index: 'million_songs',
     type: 'song',
@@ -148,7 +148,7 @@ function barGraphByDecades(){
         by_year: {
           histogram: {
             field: "year",
-            interval: 10,     // 10 years
+            interval: 1,     // 10 years
             min_doc_count: 1  // don't return results unless there's at least 1 thing there
           }, 
           aggs: {
@@ -163,11 +163,12 @@ function barGraphByDecades(){
     }
   }).then(function (resp){
     console.log(resp)
-    barYearQueryEmitter(resp);
+    barYearQueryEmitter(resp.aggregations.by_year.buckets);
   }, function (err){
     console.trace(err.message);
   }); 
 }
+
 
 function topTitleWords(min_year, max_year){
   client.search({
@@ -185,9 +186,9 @@ function topTitleWords(min_year, max_year){
       size: 0,
       aggs: {
         top_title_words: {
-          terms: {
+          terms: {    // FIX THIS MAYBE
             field: "title",   // change this to whatever field
-            size: 15          // top 10 most common
+            size: 10          // top 10 most common
           }
         }
       }
@@ -240,7 +241,7 @@ function scatterYearQueryEmitter(result) {
 
 function barYearQuery() {
   console.log('recieved a bar year request');
-  barGraphByDecades();
+  barGraphByYears();
 }
 
 function barYearQueryEmitter(result) {
