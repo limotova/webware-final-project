@@ -14,14 +14,14 @@
 
 <!--style for bar graph-->
     <style>
-        /*THIS IS FOR THE BAR GRAPHS*/
 
         text {
             font: 10px sans-serif;
         }
 
         rect.background {
-            fill: white;
+            fill:rgba(256,256,256,0.25);
+/*            fill-opacity: 50%;*/
         }
 
         .axis {
@@ -164,8 +164,7 @@
 <script src="//d3js.org/d3.v3.min.js"></script>
 
 <script>
-// BAR GRAPH SCRIPTS
- // THIS IS WHAT THE CONTENTS OF THE DATA WOULD GO INTO
+
 function barGraph(myjson, maxAvg){
   var margin = {top: 30, right: 120, bottom: 0, left: 120},
       width = 960 - margin.left - margin.right,
@@ -174,10 +173,10 @@ function barGraph(myjson, maxAvg){
   var x = d3.scale.linear()
       .range([0, width]);
 
-  var barHeight = 40;
+  var barHeight = 35;
 
   var color = d3.scale.ordinal()
-  .range(["steelblue", "#ccc"]);    // TODO: CHANGE #CCC TO A MORE OPAQUE VER OF THE FIRST COLOR
+  .range(["steelblue", "rgba(70,130,180,0.5)" ]); 
 
   var duration = 750,
       delay = 25;
@@ -191,7 +190,7 @@ function barGraph(myjson, maxAvg){
       .scale(x)
       .orient("top");
 
-  var svg = d3.select("body").append("svg")
+  var svg = d3.select("#bar-chart").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -209,7 +208,7 @@ function barGraph(myjson, maxAvg){
   svg.append("g")
       .attr("class", "y axis")
     .append("line")
-      .attr("y1", "100%");
+      .attr("y1", "472px");
 
       populate();
 
@@ -349,6 +348,7 @@ function barGraph(myjson, maxAvg){
     svg.select(".background")
         .datum(d.parent)
       .transition()
+        .duration(end)
 
   }
 
@@ -822,19 +822,23 @@ function barGraph(myjson, maxAvg){
         childData.forEach(function(d){
           if(d.name != 0){
             if(d.name > (currentDecade + 9)){
-              if(count > 1){
-                var obj = {name: currentDecade, size: (sum / count), children: tempChild};
-                totalSum += (sum / count);
-                parentData.push(obj)
-                if((sum / count) > maxAvg){
-                  maxAvg = sum / count;
+              if(currentDecade < 2000){
+                if(count > 1){
+                  totalSum += (sum / count);
+
+                    var obj = {name: currentDecade, size: (sum / count), children: tempChild};  
+                    parentData.push(obj)
+                    if((sum / count) > maxAvg){
+                      maxAvg = sum / count;
+                    }
+                    sum = 0;
+                    count = 1;
+                    tempChild = [];
                 }
-                sum = 0;
-                count = 1;
-                tempChild = [];
+                currentDecade = Math.floor(d.name / 10) * 10;
               }
-              currentDecade = Math.floor(d.name / 10) * 10;
-            }
+                
+              }
             tempChild.push(d);
             sum += d.size;
             count ++;
@@ -842,14 +846,12 @@ function barGraph(myjson, maxAvg){
           
 
         });
-        var obj = {name: currentDecade, size: sum}
+        var obj = {name: 2000, size: (sum / (count - 1)), children: tempChild}
         totalSum += sum;
         parentData.push(obj)
-        
-        // this is an object array
-        console.log('parentdata')
+
+        console.log("parent data")
         console.log(parentData)
-        console.log(currentDecade)
         
         var finalData = {name: "barChart", size: (totalSum / parentData.length), children: parentData}
         
@@ -870,6 +872,8 @@ function barGraph(myjson, maxAvg){
     function createScatterChart(data){
         console.log('received scatter query response');
         //console.log('Creating a graph with: ' + JSON.stringify(data));//data contains the message contents
+        // d3.selectAll("circle").attr("hidden", "hidden");
+        d3.selectAll("circle").remove();
         var graphData = [];
         data.forEach(function (d) {
 
